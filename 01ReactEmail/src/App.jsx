@@ -1,7 +1,14 @@
+import Form from './components/Form'
+import FormZod from './components/FormZod'
 
 const App = () => {
   return (
-    <div>App</div>
+    <>
+      <div className=''>Wtih Shadcn Form</div>
+      <Form />
+      <div className=''>With Manual Form</div>
+      <FormZod />
+    </>
   )
 }
 
