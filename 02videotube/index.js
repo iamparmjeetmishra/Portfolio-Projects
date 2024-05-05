@@ -21,6 +21,7 @@ const storage = multer.diskStorage({
       cb(null, file.fieldname + "-" + uuidv4() + path.extname(file.originalname))
    },
 })
+// console.log('storage')
 
 // Multer config
 
@@ -56,16 +57,19 @@ app.use(express.urlencoded({ extended: true })) // Data that we receiving from u
 // location to serve static file
 app.use("/uploads", express.static("uploads"))
 
+console.log('serve')
 
 app.get('/', function (req, res) {
-   res.json({ message: 'Hello Code' })
+   res.json({ message: 'Hello Code!' })
 })
 
+console.log('upload')
 
 app.post("/upload", upload.single('file'), function (req, res) {
    // console.log('file Uploaded')
    const lessionId = uuidv4()
-   const videoPath = req.file.path;
+   const videoPath = req.file?.path
+   console.log('inside upload2')
    const outputPath = `./uploads/courses/${lessionId}` // Folder Path
    const hlsPath = `${outputPath}/index.m3u8` // Unstiched video and UTF--8 ecode playlist file. Plain text files that can be used to store the URL paths of streaming audio or video and info about media tracks
    console.log('hlsPath', hlsPath)
@@ -73,7 +77,6 @@ app.post("/upload", upload.single('file'), function (req, res) {
    if (!fs.existsSync(outputPath)) {
       fs.mkdirSync(outputPath, { recursive: true })
    }
-
    // Magic comd
    //ffmpeg
 
