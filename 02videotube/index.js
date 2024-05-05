@@ -28,7 +28,7 @@ const upload = multer({
 //cors
 app.use(
    cors({
-      origin: ["http://localhost:8000", "http://localhost:5173"],
+      origin: ["http://localhost:3000", "http://localhost:5173"],
       credentials: true
    })
 )
@@ -50,7 +50,7 @@ app.use(express.json()) // Allows to add json type data
 app.use(express.urlencoded({ extended: true })) // Data that we receiving from url 
 
 // location to serve static file
-app.use("./uploads", express.static("uploads"))
+app.use("/uploads", express.static("uploads"))
 
 
 app.get('/', function(req, res) {
@@ -58,7 +58,7 @@ app.get('/', function(req, res) {
 })
 
 
-app.post("/uploads", upload.single('file'), function (req, res) {
+app.post("/upload", upload.single('file'), function (req, res) {
    console.log('file Uploaded')
 })
 
