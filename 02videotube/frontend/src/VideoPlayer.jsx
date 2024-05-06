@@ -1,11 +1,11 @@
-import React, { useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
 
 export const VideoPlayer = (props) => {
   const videoRef = useRef(null);
   const playerRef = useRef(null);
-  const { options, onReady } = props;
+  const { options, ononReady } = props;
 
   useEffect(() => {
     // Make sure Video.js player is only initialized once
