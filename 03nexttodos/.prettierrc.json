@@ -2,7 +2,7 @@
    "semi": true,
    "singleQuote": false,
    "tabWidth": 2,
-   "trailingComma": "es5",
+   "trailingComma": "all",
    "importOrder": [
       "^(react|next?/?([a-zA-Z/]*))$",
       "<THIRD_PARTY_MODULES>",
