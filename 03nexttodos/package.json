@@ -12,8 +12,8 @@
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
     "@neondatabase/serverless": "^0.9.5",
-    "@prisma/adapter-neon": "^5.19.1",
-    "@prisma/client": "^5.19.1",
+    "@prisma/adapter-neon": "^5.20.0",
+    "@prisma/client": "^5.20.0",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-aspect-ratio": "^1.1.0",
@@ -50,8 +50,9 @@
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",
     "date-fns": "^4.1.0",
+    "dotenv": "^16.4.5",
     "embla-carousel-react": "^8.3.0",
-    "hono": "^4.6.2",
+    "hono": "^4.6.3",
     "input-otp": "^1.2.4",
     "lucide": "^0.441.0",
     "lucide-react": "^0.441.0",
@@ -67,7 +68,7 @@
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^10.0.0",
-    "vaul": "^0.9.4",
+    "vaul": "^0.9.9",
     "ws": "^8.18.0",
     "zod": "^3.23.8",
     "zustand": "5.0.0-rc.2"
@@ -75,11 +76,12 @@
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/bcryptjs": "^2.4.6",
-    "@types/node": "^20.16.5",
-    "@types/react": "^18.3.8",
+    "@types/node": "^20.16.9",
+    "@types/react": "^18.3.9",
     "@types/react-dom": "^18.3.0",
     "@types/uuid": "^10.0.0",
     "@types/ws": "^8.5.12",
+    "bufferutil": "^4.0.8",
     "eslint": "^8.57.1",
     "eslint-config-next": "14.2.13",
     "eslint-config-prettier": "^9.1.0",
@@ -87,9 +89,9 @@
     "eslint-plugin-n": "^17.10.3",
     "postcss": "^8.4.47",
     "prettier": "^3.3.3",
-    "prettier-plugin-tailwindcss": "^0.6.6",
-    "prisma": "^5.19.1",
-    "tailwindcss": "^3.4.12",
+    "prettier-plugin-tailwindcss": "^0.6.8",
+    "prisma": "^5.20.0",
+    "tailwindcss": "^3.4.13",
     "typescript": "^5.6.2"
   }
 }

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 
+import { Toaster } from "@/components/ui/sonner";
+
 import "./globals.css";
 
 const geistSans = localFont({
@@ -32,9 +34,10 @@ export default function RootLayout({
       />
 
       <body
-        className={`${geistSans.variable} ${geistMono.variable} h-screen w-screen antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} min-h-screen w-screen bg-stone-100 antialiased`}
       >
         {children}
+        <Toaster position="top-right" closeButton />
       </body>
     </html>
   );
