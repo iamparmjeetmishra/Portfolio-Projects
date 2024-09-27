@@ -4,6 +4,7 @@ import { RiUserLine } from "@remixicon/react";
 import { LogOutIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { useTodoStore } from "@/store/store";
 import { useUserStore } from "@/store/user-store";
 
 import BookmarkIcon from "./bookmark-icon";
@@ -15,6 +16,13 @@ import UserBatch from "./user-batch";
 
 export default function Sidebar({ className }: { className?: string }) {
   const logout = useUserStore((state) => state.logout);
+  const { numsOfHighPriority, numsOfLowPriority, numsOfMediumPriority } =
+    useTodoStore();
+
+  const HighPriorityCount = numsOfHighPriority();
+  const MediumPriorityCount = numsOfMediumPriority();
+  const LowPriorityCount = numsOfLowPriority();
+
   return (
     <aside className={cn("flex flex-col gap-4", className)}>
       <Logo />
@@ -31,15 +39,15 @@ export default function Sidebar({ className }: { className?: string }) {
         <h2 className="font-semibold">Labels</h2>
         <LabelDiv>
           <BookmarkIcon text="High Priority" className="text-red-500" />
-          <TaskNumber num={3} />
+          <TaskNumber num={HighPriorityCount ?? 0} />
         </LabelDiv>
         <LabelDiv>
           <BookmarkIcon text="Medium Priority" className="text-orange-500" />
-          <TaskNumber num={1} />
+          <TaskNumber num={MediumPriorityCount ?? 0} />
         </LabelDiv>
         <LabelDiv>
           <BookmarkIcon text="Low Priority" className="text-green-500" />
-          <TaskNumber num={2} />
+          <TaskNumber num={LowPriorityCount ?? 0} />
         </LabelDiv>
       </div>
       <Button

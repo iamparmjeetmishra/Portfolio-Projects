@@ -10,7 +10,7 @@ export default function TaskNumber({ num, className }: TaskNumberProps) {
     <small
       className={cn(
         "flex size-5 items-center justify-center rounded-full bg-gray-300",
-        className
+        className,
       )}
     >
       {num}

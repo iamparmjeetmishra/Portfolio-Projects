@@ -23,6 +23,9 @@ export type State = {
   numsOfTodo: () => void;
   numsOfInProgress: () => void;
   numsOfCompleted: () => void;
+  numsOfHighPriority: () => void;
+  numsOfMediumPriority: () => void;
+  numsOfLowPriority: () => void;
 };
 
 export const useTodoStore = create<State>()(
@@ -82,6 +85,26 @@ export const useTodoStore = create<State>()(
         numsOfCompleted: () => {
           const count = get().todos.filter(
             (todo) => todo.status === "Completed",
+          ).length;
+          return count;
+        },
+        numsOfHighPriority: () => {
+          const count = get().todos.filter(
+            (todo) => todo.priority === "High",
+          ).length;
+
+          return count;
+        },
+        numsOfMediumPriority: () => {
+          const count = get().todos.filter(
+            (todo) => todo.priority === "Medium",
+          ).length;
+
+          return count;
+        },
+        numsOfLowPriority: () => {
+          const count = get().todos.filter(
+            (todo) => todo.priority === "Low",
           ).length;
           return count;
         },
