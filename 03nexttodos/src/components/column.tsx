@@ -10,8 +10,10 @@ import TodoComponent from "./todo";
 export default function Column({
   title,
   status,
+  nums,
 }: {
   title: string;
+  nums: number | 0;
   status: "ToDo" | "InProgress" | "Completed";
 }) {
   const { todos } = useTodoStore();
@@ -41,7 +43,7 @@ export default function Column({
     <section className="w-full flex-1 rounded-xl bg-stone-100 px-3 py-4 md:min-h-60">
       <h2 className="font-medium">
         {title}
-        <span className="ml-2 text-base opacity-40">{2}</span>
+        <span className="ml-2 text-base opacity-40">{nums}</span>
       </h2>
       <div
         className="mt-3.5"

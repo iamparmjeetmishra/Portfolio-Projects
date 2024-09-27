@@ -19,12 +19,17 @@ export type State = {
   updateTodo: (id: string, updatedFields: Partial<Todo>) => Promise<void>;
   setSelectedTodo: (id: string) => void;
   setIsLoading: (isLoading: boolean) => void;
+  // derived state
+  numsOfTodo: () => void;
+  numsOfInProgress: () => void;
+  numsOfCompleted: () => void;
 };
 
 export const useTodoStore = create<State>()(
   persist(
     (set, get) => {
       let hasFetched = false;
+
       const fetchTodos = async () => {
         set({ isLoading: true });
         try {
@@ -60,6 +65,26 @@ export const useTodoStore = create<State>()(
         selectedTodo: undefined,
         selectedTodoId: null,
         fetchTodos,
+        numsOfTodo: () => {
+          const count = get().todos.filter(
+            (todo) => todo.status === "ToDo",
+          ).length;
+
+          return count;
+        },
+        numsOfInProgress: () => {
+          const count = get().todos.filter(
+            (todo) => todo.status === "InProgress",
+          ).length;
+
+          return count;
+        },
+        numsOfCompleted: () => {
+          const count = get().todos.filter(
+            (todo) => todo.status === "Completed",
+          ).length;
+          return count;
+        },
 
         setIsLoading: (isLoading: boolean) => set({ isLoading }),
 

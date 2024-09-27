@@ -224,7 +224,7 @@ app.post("/createTodo", async (c) => {
       data: {
         title: data.title,
         description: data.description,
-        dueDate: new Date(data.dueDate),
+        dueDate: new Date(data.dueDate ?? ""),
         priority: data.priority,
         status: data.status,
         user: {

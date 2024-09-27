@@ -88,13 +88,6 @@ export default function TodoComponent({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-
-      {/* <button
-        className="absolute right-2 z-20 cursor-pointer"
-        onClick={() => removeTask(id)}
-      >
-        <RiDeleteBinLine />
-      </button> */}
     </div>
   );
 }
