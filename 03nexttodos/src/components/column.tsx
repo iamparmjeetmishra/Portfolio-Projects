@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useOptimistic } from "react";
+import { useMemo } from "react";
 
 import { useTodoStore } from "@/store/store";
 
@@ -14,17 +14,19 @@ export default function Column({
   title: string;
   status: "ToDo" | "InProgress" | "Completed";
 }) {
-  const todos = useTodoStore((state) => state.todos);
-  const [optimisticTodos, setOptimisticTodos] = useOptimistic(todos);
+  const { todos } = useTodoStore();
+  // console.log("todos", todos);
 
   const filteredTasks = useMemo(
-    () => optimisticTodos.filter((todo) => todo.status === status),
+    () => todos.filter((todo) => todo.status === status),
     [todos, status],
   );
 
   const updateTodo = useTodoStore((state) => state.updateTodo);
   const dragTodo = useTodoStore((state) => state.dragTodo);
   const draggedTodo = useTodoStore((state) => state.draggedTodo);
+
+  // const { updateTodo, dragTodo, draggedTodo } = useTodos();
 
   const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -48,11 +50,7 @@ export default function Column({
       >
         <div className="flex w-[100%] flex-col space-y-4">
           {filteredTasks.map((todo) => (
-            <TodoComponent
-              setOptimisticTodos={setOptimisticTodos}
-              key={todo.id}
-              {...todo}
-            />
+            <TodoComponent key={todo.id} {...todo} />
           ))}
 
           {filteredTasks.length === 0 && status === "ToDo" && (
@@ -64,10 +62,10 @@ export default function Column({
           {filteredTasks.length === 0 && status !== "ToDo" ? (
             <div className="mt-8 w-full text-center text-sm text-gray-800">
               <p className="mb-4">Drag your tasks here</p>
-              <NewTodoDialog />
+              <NewTodoDialog actionType="add" />
             </div>
           ) : (
-            <NewTodoDialog />
+            <NewTodoDialog actionType="add">Add Todo</NewTodoDialog>
           )}
         </div>
       </div>

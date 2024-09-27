@@ -1,5 +1,4 @@
 import { Todo } from "@prisma/client";
-import { toast } from "sonner";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -9,15 +8,17 @@ import { TodoFormSchema } from "@/lib/validations";
 
 export type State = {
   isLoading: boolean;
-  setIsLoading: (isLoading: boolean) => void;
-  todos: Todo[] | [];
+  todos: Todo[];
   draggedTodo: string | null;
-  selectedTodo: (id: string) => Promise<Todo | void>;
+  selectedTodo: Todo | undefined;
+  selectedTodoId: Todo["id"] | null;
   fetchTodos: () => Promise<void>;
   createTodo: (todo: typeof TodoFormSchema) => Promise<void>;
   dragTodo: (id: string | null) => void;
   removeTodo: (id: string) => Promise<void>;
   updateTodo: (id: string, updatedFields: Partial<Todo>) => Promise<void>;
+  setSelectedTodo: (id: string) => void;
+  setIsLoading: (isLoading: boolean) => void;
 };
 
 export const useTodoStore = create<State>()(
@@ -25,7 +26,7 @@ export const useTodoStore = create<State>()(
     (set, get) => {
       let hasFetched = false;
       const fetchTodos = async () => {
-        set({ isLoading: true }); // Set loading state
+        set({ isLoading: true });
         try {
           const token = await isUserAuthenticated();
           if (!token) {
@@ -42,11 +43,9 @@ export const useTodoStore = create<State>()(
         } catch (error) {
           console.error("Error fetching todos", error);
         } finally {
-          set({ isLoading: false }); // Reset loading state
+          set({ isLoading: false });
         }
       };
-
-      // Immediately invoke fetchTodos when the store is initialized
       (async () => {
         if (!hasFetched) {
           await fetchTodos();
@@ -56,10 +55,14 @@ export const useTodoStore = create<State>()(
 
       return {
         todos: [],
-        draggedTodo: null,
         isLoading: false,
-        setIsLoading: (isLoading: boolean) => set({ isLoading }),
+        draggedTodo: null,
+        selectedTodo: undefined,
+        selectedTodoId: null,
         fetchTodos,
+
+        setIsLoading: (isLoading: boolean) => set({ isLoading }),
+
         createTodo: async (todo) => {
           const token = await isUserAuthenticated();
           if (!token) {
@@ -79,12 +82,9 @@ export const useTodoStore = create<State>()(
             console.log("Error creating todo", error);
           }
         },
-        selectedTodo: async (id: string) => {
-          const selectedTodo = get().todos.find((todo) => todo.id === id);
-          console.log("selectedTodo", selectedTodo);
-          return selectedTodo;
-        },
+
         dragTodo: (id) => set({ draggedTodo: id }),
+
         removeTodo: async (id: string) => {
           const token = await isUserAuthenticated();
           if (!token) {
@@ -107,10 +107,11 @@ export const useTodoStore = create<State>()(
             console.log("Error removing task", error);
           }
         },
-        updateTodo: async (id, updatedFields: Partial<Todo>) => {
+
+        updateTodo: async (id: Todo["id"], updatedFields: Partial<Todo>) => {
           const token = await isUserAuthenticated();
           if (!token) {
-            toast.error("No token");
+            console.log("No token");
             return;
           }
           try {
@@ -123,7 +124,6 @@ export const useTodoStore = create<State>()(
                 },
               },
             );
-            console.log("Todo Update", res);
             set((state) => ({
               todos: state.todos.map((todo) =>
                 todo.id === id ? { ...todo, ...updatedFields } : todo,
@@ -133,8 +133,16 @@ export const useTodoStore = create<State>()(
             console.log("Error updating task", error);
           }
         },
+
+        setSelectedTodo: (id: string) => {
+          const selectedTodo = get().todos.find((todo) => todo.id === id);
+          set({ selectedTodo });
+        },
       };
     },
-    { name: "todos-store", skipHydration: true },
+    {
+      name: "todos-store",
+      skipHydration: true,
+    },
   ),
 );

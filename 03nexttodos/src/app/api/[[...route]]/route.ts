@@ -363,7 +363,7 @@ app.put("/todos/:id", async (c) => {
   try {
     const todo = await prisma.todo.update({
       where: { id },
-      data: { ...data },
+      data: { ...updatedFields },
     });
     return c.json(todo);
   } catch (error) {

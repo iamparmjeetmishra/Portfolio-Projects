@@ -21,7 +21,7 @@ export const TodoFormSchema = z.object({
     .string()
     .trim()
     .max(50, { message: "Please title must be under 50 words" }),
-  description: z.string().trim().optional(),
+  description: z.string().trim().optional().nullable().default(""),
   status: z.enum(["ToDo", "InProgress", "Completed"]).default("ToDo"),
   priority: z.enum(["Low", "Medium", "High"]).default("Low"),
   dueDate: z
@@ -29,7 +29,8 @@ export const TodoFormSchema = z.object({
     .transform((val) => new Date(val)) // transform string to date
     .refine((date) => !isNaN(date.getTime()), {
       message: "Invalid date format",
-    }),
+    })
+    .nullable(),
 });
 
 export const UpdateTodoData = z.object({
@@ -61,6 +62,8 @@ export const SignUpFormSchema = z.object({
   }),
 });
 
+export type TodoFormInferSchema = z.infer<typeof TodoFormSchema>;
+export type UpdateTodoInferSchema = z.infer<typeof UpdateTodoData>;
 export type SignInFormInferSchema = z.infer<typeof SignInFormSchema>;
 export type SignUpFormInferSchema = z.infer<typeof SignUpFormSchema>;
 

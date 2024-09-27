@@ -1,15 +1,17 @@
+import { useTransition } from "react";
+
 import { Todo } from "@prisma/client";
 import { Ellipsis, EllipsisVertical, Trash } from "lucide-react";
 
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ToLocaleDate, cn } from "@/lib/utils";
 import { useTodoStore } from "@/store/store";
 
+import NewTodoDialog from "./new-todo-dialog";
 import { Button } from "./ui/button";
 
 type TodoProps = Todo & {
@@ -25,8 +27,10 @@ export default function TodoComponent({
   dueDate,
   createdAt,
 }: TodoProps) {
+  // const { dragTodo, removeTodo } = useTodos();
   const dragTodo = useTodoStore((state) => state.dragTodo);
   const removeTodo = useTodoStore((state) => state.removeTodo);
+  const [isPending, startTransition] = useTransition();
 
   return (
     <div
@@ -57,25 +61,30 @@ export default function TodoComponent({
             </Button>
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent className="w-1/2">
-            <button
-              className="w-full cursor-pointer hover:bg-zinc-100"
-              onClick={() => removeTodo(id)}
+          <DropdownMenuContent className="flex w-1/2 flex-col gap-1">
+            <NewTodoDialog
+              className="flex w-full items-center justify-between"
+              actionType="edit"
+              id={id}
             >
-              <DropdownMenuItem className="flex cursor-pointer items-center justify-between gap-2">
-                <p>Edit</p>
-                <Ellipsis />
-              </DropdownMenuItem>
-            </button>
-            <button
-              className="w-full cursor-pointer hover:bg-zinc-100"
-              onClick={() => removeTodo(id)}
+              <p>Update</p>
+              <Ellipsis />
+            </NewTodoDialog>
+            <Button
+              disabled={isPending}
+              variant="secondary"
+              className="w-full cursor-pointer"
+              onClick={async () => {
+                startTransition(async () => {
+                  removeTodo(id);
+                });
+              }}
             >
-              <DropdownMenuItem className="flex cursor-pointer items-center justify-between">
+              <div className="flex w-full cursor-pointer items-center justify-between px-0">
                 <p>Delete</p>
                 <Trash />
-              </DropdownMenuItem>
-            </button>
+              </div>
+            </Button>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

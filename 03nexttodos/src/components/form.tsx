@@ -1,6 +1,6 @@
-"use client";
-
+// "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Todo } from "@prisma/client";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -30,30 +30,65 @@ import {
 } from "@/components/ui/select";
 import { BtnActions } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { TodoFormSchema } from "@/lib/validations";
+import {
+  TodoFormInferSchema,
+  TodoFormSchema,
+  UpdateTodoData,
+  UpdateTodoInferSchema,
+} from "@/lib/validations";
 import { useTodoStore } from "@/store/store";
 
+import TodoFormBtn from "./todo-form-button";
 import { Input } from "./ui/input";
 import { Separator } from "./ui/separator";
 import { Textarea } from "./ui/textarea";
 import UserBatch from "./user-batch";
 
 type FormProps = {
+  id?: Todo["id"];
   actionType: BtnActions;
+  onFormSubmission: () => void;
 };
 
-export default function FormComponent() {
-  const { updateTodo, createTodo } = useTodoStore();
+export default function FormComponent({
+  actionType,
+  id,
+  onFormSubmission,
+}: FormProps) {
+  const createTodo = useTodoStore((state) => state.createTodo);
+  const updateTodo = useTodoStore((state) => state.updateTodo);
   const selectedTodo = useTodoStore((state) => state.selectedTodo);
-  console.log("formTodos", selectedTodo);
 
-  const form = useForm<typeof TodoFormSchema>({
+  const form = useForm<TodoFormInferSchema>({
     resolver: zodResolver(TodoFormSchema),
+    defaultValues:
+      actionType === "edit" && selectedTodo
+        ? {
+            title: selectedTodo.title,
+            description: selectedTodo.description,
+            status: selectedTodo.status,
+            priority: selectedTodo.priority,
+            dueDate: selectedTodo.dueDate || undefined,
+          }
+        : {
+            title: "",
+            description: "",
+            status: "ToDo", // Default to a valid status
+            priority: "Low", // Default to a valid priority
+            dueDate: undefined,
+          },
   });
 
-  const handleFormSubmit = async (values: typeof TodoFormSchema) => {
+  const handleFormSubmit = async (
+    values: TodoFormInferSchema | UpdateTodoInferSchema,
+  ) => {
+    onFormSubmission();
     try {
-      await createTodo(values);
+      if (actionType === "add") {
+        await createTodo(values as typeof TodoFormSchema);
+      } else if (actionType === "edit") {
+        await updateTodo(selectedTodo!.id, values as typeof UpdateTodoData);
+      }
     } catch (error) {
       console.log("Error creating todo", error);
       console.log(error);
@@ -99,7 +134,7 @@ export default function FormComponent() {
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
-                        selected={field.value}
+                        selected={field.value ?? undefined}
                         onSelect={field.onChange}
                         initialFocus
                       />
@@ -203,6 +238,7 @@ export default function FormComponent() {
                 <Textarea
                   {...field}
                   placeholder="Description..."
+                  value={field.value ?? ""}
                   className="bg-zinc-200"
                   rows={5}
                 />
@@ -211,7 +247,7 @@ export default function FormComponent() {
             </FormItem>
           )}
         />
-        {/* <Button type="submit">submit</Button> */}
+        <TodoFormBtn actionType={actionType} />
       </form>
     </Form>
   );

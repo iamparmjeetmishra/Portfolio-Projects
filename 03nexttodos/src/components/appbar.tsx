@@ -14,9 +14,9 @@ export default function AppBar() {
         </span>
         <div className="relative flex h-auto items-center space-x-2 rounded bg-black px-4 py-1.5 text-white outline-1 outline-amber-600 hover:bg-black/60 focus:ring-1 focus:ring-emerald-500">
           <RiAddFill />
-          <span>Create task</span>
+          <span>Create Todo</span>
           <div className="absolute left-0 right-0 top-0 w-full opacity-0">
-            <NewTodoDialog />
+            <NewTodoDialog actionType="add" />
           </div>
         </div>
       </div>

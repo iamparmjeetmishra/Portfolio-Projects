@@ -28,10 +28,7 @@ export default prisma;
 
 if (process.env.NODE_ENV !== "production") globalThis.prismaGlobal = prisma;
 
-console.log("PrismaDboutsite", Date.now());
-
 export const getPrisma = async () => {
-  console.log("prisma db", Date.now());
   if (prisma) {
     try {
       await prisma.$connect(); // Pool is handled internally
