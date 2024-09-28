@@ -16,7 +16,7 @@ export default function Column({
   nums: number | 0;
   status: "ToDo" | "InProgress" | "Completed";
 }) {
-  const { todos } = useTodoStore();
+  const todos = useTodoStore((state) => state.todos);
   // console.log("todos", todos);
 
   const filteredTasks = useMemo(

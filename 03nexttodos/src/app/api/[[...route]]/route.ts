@@ -158,6 +158,42 @@ app.post("/login", async (c) => {
   }
 });
 
+app.get("/user", async (c) => {
+  const token = await c.req.header("Authorization");
+  if (!token) {
+    return c.json(
+      {
+        message: "Not authenticated",
+      },
+      401,
+    );
+  }
+  const JwtSecret = (await process.env.JWT_SECRET) as string;
+  const userId = await verify(token, JwtSecret);
+
+  const prisma = await getPrisma();
+
+  try {
+    // checking the user exists in the db
+    const user = await prisma.user.findUnique({
+      where: {
+        id: String(userId.id),
+      },
+    });
+    console.log("userExists", user);
+    return c.json(user);
+  } catch (error) {
+    return c.json(
+      {
+        message: "Failed to fetch user",
+        error,
+      },
+      500,
+    );
+  } finally {
+    await closePrisma();
+  }
+});
 // ----------todos----------------
 
 //Create todo
