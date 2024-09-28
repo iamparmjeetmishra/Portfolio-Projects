@@ -34,7 +34,7 @@ export const useUserStore = create<State>()(
             },
           });
           set({ user: res.data });
-          console.log("Fetched user", res.data);
+          // console.log("Fetched user", res.data);
         } catch (error) {
           console.error("Error fetching user", error);
         }

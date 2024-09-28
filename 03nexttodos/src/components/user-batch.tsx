@@ -9,7 +9,7 @@ type UserBatchProps = {
 
 export default function UserBatch({ withPremium, size }: UserBatchProps) {
   const user = useUserStore((state) => state.user);
-  console.log("User", user);
+  // console.log("User", user);
 
   return (
     <div className="flex items-center gap-3">

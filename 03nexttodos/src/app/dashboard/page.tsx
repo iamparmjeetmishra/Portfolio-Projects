@@ -16,7 +16,7 @@ export default function Dashboard() {
   // Protected Page
   const isAuthenticated = !!isUserAuthenticated();
 
-  console.log("isAuthenticatedFromDash", isAuthenticated);
+  // console.log("isAuthenticatedFromDash", isAuthenticated);
 
   useEffect(() => {
     (async () => {
@@ -28,7 +28,7 @@ export default function Dashboard() {
     })();
   }, [isAuthenticated]);
 
-  console.log("isAuthenticatedFromDash", isAuthenticated);
+  // console.log("isAuthenticatedFromDash", isAuthenticated);
 
   if (isAuthenticated === false) {
     toast.error("Please login or signup");
